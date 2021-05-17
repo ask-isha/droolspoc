@@ -1,0 +1,54 @@
+package drools;
+
+import com.drools.Alaram;
+import com.drools.Sprinkler;
+import com.drools.Fire;
+import com.drools.Room;
+
+rule "No-Alaram"
+dialect "java"
+when
+   not $alaram:Alaram()
+   not $sprinkler:Sprinkler()
+then
+    System.out.println("Every thing ok!");
+end
+
+rule "alarm-fireexists"
+when
+	$fire:Fire()  
+  //  $roomRef:Room();
+then
+	System.out.println("Fire Exists...........");
+	insert(new Alaram());
+    
+end
+
+rule "fireexists-turnsonsprklr"
+when
+	$fire:Fire()// binding fire va to fact object
+	$room:Room() from $fire.getRoom()
+	$sprinkler:Sprinkler($room==room && status==false)
+then
+	System.out.println("Sprinkler On IF Fire Exists..........."+$sprinkler.isStatus());
+	modify($sprinkler){setStatus(true)};
+	System.out.println("Sprinkler On IF Fire Exists..........."+$room.getName()+"::"+$sprinkler.isStatus());
+end
+
+rule "firenotexists-turnsoffsprklr"
+when
+	$sprinkler:Sprinkler($room : room && status==true)
+	not Fire(room == $room)
+then
+	modify($sprinkler){setStatus(false)};
+	System.out.println("Turn off sprinkler for room..........."+$room.getName());
+end
+
+rule "Cancel alarm"
+when
+   not $fire:Fire()
+       $alaram: Alaram()
+then
+	retract($alaram);
+	System.out.println("Fire Exists...........");
+end
