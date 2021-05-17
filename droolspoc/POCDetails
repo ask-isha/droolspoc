@@ -1,0 +1,46 @@
+Fact Model
+              Room
+                        name – room name
+              Fire
+                     room – fire happen in room
+              Alarm 
+              Sprinkler
+                             room - Sprinkler that will be put on if the room is on fire
+                             on – status (true/false)
+
+              Rule 1 ( All ok)
+                             when
+                                           1. If there is NO Alarm() object in the session
+                                           2. If there is NO Sprinkler() object in the session 
+                             then
+                                           1. Print out the relevant message (Everything is ok) (System out/Log4j)
+
+              Rule 2 (Raise fire alarm when there is at least 1 fire)
+                             when
+                                           1. If there exists at least 1 Fire() object in the session 
+                             then
+                                           1. Insert a new Alarm() object in the session
+                                           2. Print out the relevant message (Raised the alarm because at least 1 Fire()  object exists in the session)
+
+              Rule 3 (When there is, turn on Sprinkler)
+                             when
+                                           1. If there is A Fire() object in the session, then use that and set the object room(fire in room)
+                                           2. If there is A Sprinkler() object with "on" flag set to false and attribute room is same object as the one in the variable room 
+                             then
+                                           1. Update the Sprinkler object which is referenced through $sprinkler and call its setOn() method with parameter "true"
+                                           2. Print out the relevant message (Turn ON the sprinkler for room,+ roomName)
+              Rule 4 (When the fire extinguished, turn off Sprinkler)
+                             when
+                                           1. If there is A Sprinkler() object with "on" flag set to true and attribute room is same object as the one in the variable $room 
+                                           3. There is NO Fire() object for that room
+                             then
+                                           1. Update the Sprinkler object which is referenced through $sprinkler and call its setOn() method with parameter "false"
+                                           2. Print out the relevant message (TRUN off the sprinkler for room + roomName)
+
+              Rule 5(Cancel Alarm)
+                             when
+                                           1. If there is NO Fire() object in the session
+                                           2. and there is an Alarm() object in the session
+                             then
+                                           1. Remove the referenced Alarm() object from the session
+                                           2. Print out the relevant message (Cancel the alarm)
