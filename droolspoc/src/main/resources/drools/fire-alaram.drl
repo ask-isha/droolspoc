@@ -33,6 +33,7 @@ then
 	System.out.println("Sprinkler On IF Fire Exists..........."+$sprinkler.isStatus());
 	modify($sprinkler){setStatus(true)};
 	System.out.println("Sprinkler On IF Fire Exists..........."+$room.getName()+"::"+$sprinkler.isStatus());
+	retract($fire); // remove fire obj from working memory
 end
 
 rule "firenotexists-turnsoffsprklr"
@@ -47,8 +48,8 @@ end
 rule "Cancel alarm"
 when
    not $fire:Fire()
-       $alaram: Alaram()
+   $alaram:Alaram()
 then
 	retract($alaram);
-	System.out.println("Fire Exists...........");
+	System.out.println("turned off Alaram...........");
 end
